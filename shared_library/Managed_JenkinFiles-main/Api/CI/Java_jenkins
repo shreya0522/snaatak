@@ -1,0 +1,30 @@
+@Library('shared-library') _
+import org.mygurukulam.template.*
+
+properties([
+    parameters([
+        string(name: 'version', defaultValue: '1.0', description: 'Enter the version')
+    ])
+])
+
+node {
+    def mvnHome = tool 'MAVEN3'
+    def mavenHome = "${mvnHome}/bin"
+    env.PATH = "${mavenHome}:${env.PATH}"
+
+    def repoUrl = 'https://github.com/OT-MyGurukulam/Salary_API.git'
+    def credentialsId = 'dnishad004'
+    def branch = 'main'
+    def packerConfig = [
+    packerUrl: 'https://github.com/OT-MyGurukulam/Packer.git',
+    version: params.version,
+    packerFile: 'salary/salary.pkr.hcl']
+
+    def tf = new JavaCI()
+    tf.call(
+        repoUrl,
+        credentialsId,
+        branch,
+        packerConfig
+    )
+}

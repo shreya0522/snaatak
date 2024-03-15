@@ -1,0 +1,14 @@
+@Library('shared-library') _
+import org.mygurukulam.template.*
+node {  
+    def repoUrl = 'https://github.com/OT-MyGurukulam/Frontend_API.git'
+    def branch = 'main'
+    def credentialsId = 'dnishad004'
+    def packerConfig = [
+        packerUrl: 'https://github.com/OT-MyGurukulam/Packer.git',
+        packerFile: 'frontend.pkr.hcl',
+        directory: 'frontend'
+    ]
+    def attendencePipeline = new ReactCI()
+    attendencePipeline.call(repoUrl, credentialsId, branch, packerConfig)
+}

@@ -1,0 +1,12 @@
+@Library('shared-library') _
+import org.mygurukulam.template.*
+node {
+    def repoUrl = 'https://github.com/OT-MyGurukulam/Monitoring_Ansible_Role.git'
+    def credentialsId = 'dnishad004'
+    def ansible = new AnsibleCD()
+    ansible.call(
+        repoUrl,
+        credentialsId,
+        "main"
+    )
+}

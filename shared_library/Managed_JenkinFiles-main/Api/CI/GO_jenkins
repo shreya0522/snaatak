@@ -1,0 +1,16 @@
+@Library('shared-library') _
+import org.mygurukulam.template.*
+node { 
+    GOPATH = "${tool 'go-1.20'}/bin"
+    env.PATH = "${GOPATH}:${env.PATH}"
+    def repoUrl = 'https://github.com/OT-MyGurukulam/Employee_API.git'
+    def branch = 'main'
+    def credentialsId = 'dnishad004'
+    def packerConfig = [
+        packerUrl: 'https://github.com/OT-MyGurukulam/Packer.git',
+        packerFile: 'employee.pkr.hcl',
+        directory: 'employee'
+    ]
+    def goPipeline = new goCI()
+    goPipeline.call(repoUrl, credentialsId, branch, packerConfig)
+}

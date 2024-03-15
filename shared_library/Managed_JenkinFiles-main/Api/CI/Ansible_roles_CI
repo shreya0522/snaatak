@@ -1,0 +1,15 @@
+@Library('shared-library') _
+import org.mygurukulam.template.*
+node {
+    def url = 'https://github.com/OT-MyGurukulam/Scylla_Ansible_Role.git'
+    def cred = 'dnishad004'
+    def branch = 'main'
+    def path = 'scylla/tests/test.yml'
+    def ansible = new AnsibleCI()
+    ansible.call(
+        url,
+        cred,
+        branch,
+        path        
+    )
+}

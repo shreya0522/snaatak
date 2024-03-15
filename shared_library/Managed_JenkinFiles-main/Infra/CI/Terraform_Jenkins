@@ -1,0 +1,39 @@
+@Library('shared-library') _
+import org.mygurukulam.template.*
+properties([
+    parameters([
+        choice(name: 'branch', choices: ['main', ''], description: 'Select the branch'),
+        choice(name: 'rootDir', choices: ['Prod', 'Nonprod'], description: 'Select the root directory'),
+        choice(name: 'childDir',choices: ['ALB', 'ASG','EC2','Network','Security', 'Route53'], description: 'Select the child directory'),
+        string(name: 'version', defaultValue: '2.0', description: 'Enter the version'),
+    ])
+])
+node {
+    def repoUrl = 'https://github.com/OT-MyGurukulam/Infrastructure.git'
+    def credentialsId = 'dnishad004'
+    def tf = new TerraformCI()
+    tf.call(
+        repoUrl,
+        credentialsId,
+        params.branch,
+        params.rootDir,
+        params.childDir,
+        params.version
+    )
+}
+
+// @Library('shared-library') _
+// import org.mygurukulam.template.*
+
+// node {
+//     def repoUrl = 'https://github.com/OT-MyGurukulam/Infrastructure.git'
+//     def branch = 'main'
+//     def credentialsId = 'dnishad004'
+//     def version = '2.0'
+//     def rootDir = "Prod"
+//     def childDir = "Network"
+
+//     def tf = new Terraform()
+
+//     tf.call(repoUrl, credentialsId, branch, rootDir, childDir, version)
+// }

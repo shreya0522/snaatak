@@ -1,0 +1,17 @@
+@Library('shared-library') _
+import org.mygurukulam.template.*
+
+ node {
+     def repoUrl = 'https://github.com/OT-MyGurukulam/Attendance_API.git'
+     def branch = 'main'
+     def credentialsId = 'dnishad004'
+     def packerConfig = [
+      packerUrl: 'https://github.com/OT-MyGurukulam/Packer.git',
+      //version: params.version,
+      packerFile: 'attendance.pkr.hcl',
+      directory:'attendance']
+
+     def tf = new python()
+
+     tf.call(repoUrl, credentialsId, branch, packerConfig)
+ }
