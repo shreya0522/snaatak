@@ -1,0 +1,6 @@
+extends: relaxed
+
+rules:
+  empty-lines:
+    level: warning
+

@@ -1,0 +1,28 @@
+---
+
+- name: Update APT packages
+  apt:
+    update_cache: yes
+
+- name: Set hostname
+  hostname:
+    name: "haproxy"
+
+- name: Install net-tools
+  apt:
+    name: net-tools
+    
+- name: Install HAProxy
+  apt:
+   name: haproxy
+   state: present
+
+- name: Configuring HA Proxy
+  template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+
+- name: Restart HAProxy service
+  systemd:
+    name: haproxy
+    state: restarted

@@ -1,0 +1,5 @@
+[regex]
+  allowed_secrets = [
+    "path/to/your/secret/file",
+    "another/path/to/your/secret/directory/**"
+  ]

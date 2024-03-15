@@ -1,0 +1,30 @@
+---
+# tasks file for postgresql_cluster
+
+ - name: common installation
+   include_tasks: common.yml
+   when: "'etcd' not in tags.Name and 'haproxy' not in tags.Name"
+   
+ - name: running etcd task
+   include_tasks: etcd.yml
+   when: "'etcd' in tags.Name"
+        
+ - name: running node1 task 
+   include_tasks: node1.yml
+   when: "'node1' in tags.Name"
+
+ - name: running node2 task 
+   include_tasks: node2.yml
+   when: "'node2' in tags.Name"
+
+ - name: running node3 task
+   include_tasks: node3.yml
+   when: "'node3' in tags.Name"
+        
+ - name: running haproxy task
+   include_tasks: haproxy.yml
+   when: "'haproxy' in tags.Name"
+
+ - name: running postgres_exporter task
+   include_tasks: postgres_exporter.yml
+   when: "'etcd' not in tags.Name and 'haproxy' not in tags.Name"

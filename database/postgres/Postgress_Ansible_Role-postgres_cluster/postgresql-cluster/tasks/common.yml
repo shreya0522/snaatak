@@ -1,0 +1,69 @@
+---
+
+- name: Update APT packages
+  apt:
+    update_cache: yes
+
+- name: Install net-tools
+  apt:
+    name: net-tools
+    state: present
+
+- name: Install PostgreSQL and dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - postgresql
+    - postgresql-server-dev-{{ postgres-version }}
+
+- name: Create replication user
+  shell: |
+    sudo -u postgres psql -c "CREATE USER {{ replication_user }} REPLICATION LOGIN ENCRYPTED PASSWORD '{{ replica_password }}';" || true
+
+- name: Grant replication privileges to replicator user
+  shell:  |
+    sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '{{ postgres_password }}';" || true
+
+- name: Stop PostgreSQL service
+  systemd:
+    name: postgresql
+    state: stopped
+
+- name: Create Symbolic Links
+  shell: |
+    ln -s /usr/lib/postgresql/14/bin/* /usr/sbin/ | true
+  register: symbolic_links_output
+
+- name: Display Symbolic Links Output
+  debug:
+    var: symbolic_links_output.stdout_lines
+
+- name: Install Python and pip
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python3
+    - python3-pip
+
+- name: Install additional Python packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python3-testresources
+
+- name: Upgrade setuptools
+  pip:
+    name: setuptools
+    state: latest
+
+- name: Install Python packages using pip
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - psycopg2
+    - patroni
+    - python-etcd

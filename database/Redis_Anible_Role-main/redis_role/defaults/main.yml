@@ -1,0 +1,6 @@
+---
+# defaults file for redis_role
+redis_password: "your_password"
+redis_conf_path: "/etc/redis/redis.conf"
+redis_bind_address: "0.0.0.0"
+redis_port: 6379

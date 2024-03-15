@@ -1,0 +1,8 @@
+---
+# Java version
+jdkversion: openjdk-8-jre-headless
+
+# Scylladb gpg command
+scylla-gpg: "gpg --homedir /tmp --no-default-keyring --keyring /etc/apt/keyrings/scylladb.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys d0a112e067426ab2"
+scylla_repo: http://downloads.scylladb.com/deb/debian/scylla-5.2.list
+scylla_repo_dest: "/etc/apt/sources.list.d/scylla.list"

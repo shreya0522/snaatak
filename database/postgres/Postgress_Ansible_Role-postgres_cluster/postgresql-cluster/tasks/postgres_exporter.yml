@@ -1,0 +1,50 @@
+---
+- name: Create directory for PostgreSQL exporter
+  file:
+    path: /opt/postgres_exporter
+    state: directory
+
+- name: Download PostgreSQL exporter binary tarball
+  get_url:
+    url: https://github.com/prometheus-community/postgres_exporter/releases/download/v0.15.0/postgres_exporter-0.15.0.linux-amd64.tar.gz
+    dest: /opt/postgres_exporter/postgres_exporter-0.15.0.linux-amd64.tar.gz
+
+- name: Extract PostgreSQL exporter binary tarball
+  ansible.builtin.unarchive:
+    src: /opt/postgres_exporter/postgres_exporter-0.15.0.linux-amd64.tar.gz
+    dest: /opt/postgres_exporter
+    remote_src: yes
+
+- name: Create environment file for PostgreSQL exporter
+  template:
+    src: postgres_exporter.env.j2
+    dest: /opt/postgres_exporter/postgres_exporter.env
+
+- name: Copy PostgreSQL exporter binary to /usr/local/bin
+  copy:
+    src: /opt/postgres_exporter/postgres_exporter-0.15.0.linux-amd64/postgres_exporter
+    dest: /usr/local/bin
+    mode: "0755"
+  notify: restart postgres_exporter
+
+- name: Create systemd unit file for PostgreSQL exporter service
+  copy:
+    src: postgres_exporter.service.j2
+    dest: /etc/systemd/system/postgres_exporter.service
+  notify: reload systemd
+
+- name: Start and enable PostgreSQL exporter service
+  systemd:
+    name: postgres_exporter
+    state: started
+    enabled: yes
+
+- name: Check PostgreSQL exporter service status
+  systemd:
+    name: postgres_exporter
+    state: restarted
+  register: service_status
+
+- name: Debug service status
+  debug:
+    var: service_status

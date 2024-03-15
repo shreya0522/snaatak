@@ -1,0 +1,6 @@
+---
+# vars file for postgres_standAlone
+  postgresql_version: "9.6"
+  postgres_user: "postgres"
+  postgres_password: "password"
+  postgres_db_name: "attendance"

@@ -1,0 +1,10 @@
+---
+# vars file for postgresql-patroni
+postgres_version: "14"
+etcdnode_ip: "10.0.226.163"
+replication_user: "replicator"
+replica_password: "shreya"
+node1_ip: "10.0.146.110"
+node2_ip: "10.0.153.85"
+node3_ip: "10.0.131.244"
+postgres_password: "shreya"

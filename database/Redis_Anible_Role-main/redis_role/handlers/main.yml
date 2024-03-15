@@ -1,0 +1,6 @@
+---
+# handlers file for redis_role
+    - name: Restart Redis
+      systemd:
+        name: redis-server
+        state: restarted

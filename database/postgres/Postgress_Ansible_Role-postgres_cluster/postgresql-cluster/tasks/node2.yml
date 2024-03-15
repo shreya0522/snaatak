@@ -1,0 +1,40 @@
+---
+
+#node-2
+
+#---------------
+
+- name: Set hostname
+  hostname:
+    name: "node2"
+
+- name: Create Patroni configuration file
+  template:
+    src: patroni-node2.yml.j2
+    dest: /etc/patroni.yml
+
+- name: Create directory for Patroni data
+  file:
+    path: /data/patroni
+    state: directory
+    mode: 0755
+    owner: postgres
+    group: postgres
+
+- name: changing main dir permission
+  shell: |
+      sudo chown -R postgres:postgres /data/patroni
+
+- name: Set permissions for /data/patroni
+  shell: |
+    sudo chmod 700 /data/patroni 
+
+- name: Create Patroni systemd service file
+  template:
+    src: patroni.servicefile.j2
+    dest: /etc/systemd/system/patroni.service
+
+- name: Start Patroni service
+  systemd:
+    name: patroni
+    state: started

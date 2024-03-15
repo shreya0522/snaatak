@@ -1,0 +1,8 @@
+# .ansible-lint
+---
+warn_list:
+  - 'yaml[empty-lines]'
+  - 'yaml[trailing-spaces]'
+  - 'name[play]'
+  - 'role-name[path]'
+  - 'yaml'

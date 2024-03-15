@@ -1,0 +1,11 @@
+# .ansible-lint
+warn_list:
+  - new-line-at-end-of-file
+  - indentation
+  - truthy
+  - trailing-spaces
+  - braces
+  - package-latest
+  - role-name
+  - var-spacing
+  - yaml 

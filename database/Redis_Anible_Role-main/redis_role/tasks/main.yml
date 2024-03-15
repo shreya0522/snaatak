@@ -1,0 +1,7 @@
+---
+# tasks file for redis_role
+- name: Install on Debian
+  import_tasks: Debian.yml
+
+- name: Install on Redhat
+  import_tasks: Redhat.yml

@@ -1,0 +1,46 @@
+---
+# tasks file for postgres_standAlone
+
+  - name: Add PostgreSQL repository
+    lineinfile:
+      path: "/etc/apt/sources.list.d/pgdg.list"
+      line: "deb https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
+      create: yes
+    
+
+  - name: Import PostgreSQL GPG key
+    shell: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+  - name: Update apt package cache
+    apt:
+      update_cache: yes
+
+  - name: Install PostgreSQL
+    apt:
+      name: "postgresql-{{ postgresql_version }}"
+      state: present
+
+  - name: Alter postgres password
+    shell: | 
+         sudo -u postgres psql -c "ALTER USER {{ postgres_user }} WITH PASSWORD '(( postgres_password ))';" || true
+          
+  - name: Create Database for postgres
+    shell: |
+        sudo -u postgres psql -c "CREATE DATABASE {{ postgres_db_name }};" || true
+     
+
+  - name: Replace listen_addresses in postgresql.conf
+    lineinfile:
+      path: /etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+      regexp: '^#listen_addresses = ''localhost'''
+      line: 'listen_addresses = ''*'''
+
+  - name: allow any ip to connect via password
+    lineinfile: 
+      path:  /etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
+      regexp: '^host\s+all\s+all\s+127\.0\.0\.1/32\s+md5'
+      line: 'host    all      all      0.0.0.0/0     md5'
+    notify:
+       - restart postgresql
+
+  

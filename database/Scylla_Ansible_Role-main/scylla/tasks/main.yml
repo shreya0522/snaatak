@@ -1,0 +1,11 @@
+---
+- name: Install Dependencies
+  import_tasks: dependencies.yml
+
+- name: Install on Debian
+  import_tasks: debina-install.yml
+
+- name: Configure Scylladb
+  import_tasks: configuration.yml
+  
+

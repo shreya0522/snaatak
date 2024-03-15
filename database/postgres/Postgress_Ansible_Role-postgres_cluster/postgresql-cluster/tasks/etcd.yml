@@ -1,0 +1,29 @@
+- name: Update APT packages
+  apt:
+    update_cache: yes
+
+- name: Set hostname
+  hostname:
+    name: "etcd"
+
+- name: Install net-tools
+  apt:
+    name: net-tools
+    state: present
+
+- name: Install etcd
+  apt:
+    name: etcd
+    state: present
+
+#---------------------Configure etcd on the etcdnode
+
+- name: Create etcd configuration file
+  template:
+    src: etcd_config.j2
+    dest: /etc/default/etcd
+
+- name: Restart etcd service
+  systemd:
+    name: etcd
+    state: restarted

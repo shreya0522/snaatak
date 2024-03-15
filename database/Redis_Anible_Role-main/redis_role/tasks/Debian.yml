@@ -1,0 +1,27 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install Redis for Ubuntu
+  apt:
+    name: redis-server
+    state: present
+  when: ansible_os_family == 'Debian'                                            
+
+- name: Set Redis password in Redis configuration
+  lineinfile:
+    path: "{{ redis_conf_path }}"
+    regexp: '^# requirepass'
+    line: 'requirepass {{ redis_password }}'
+  notify: Restart Redis
+
+- name: Disable protected mode 
+  lineinfile:
+    path: "{{ redis_conf_path }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^protected-mode', line: 'protected-mode no' }
+    - { regexp: '^bind', line: 'bind {{redis_bind_address}}' }
+  notify: Restart Redis
